@@ -8,7 +8,15 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $role = Auth::user()->role;
+
+    if ($role === 'admin') {
+        return view('dashboard_admin');
+    } elseif ($role === 'doctor') {
+        return view('dashboard_doctor');
+    } else {
+        return view('dashboard');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
