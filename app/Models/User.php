@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',   // добавили
     ];
 
     /**
@@ -45,4 +46,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // === Relationships ===
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'patient_id');
+    }
+
+    public function terms()
+    {
+        return $this->hasMany(Term::class, 'doc_id');
+    }
+
 }
