@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::resource('departments', DepartmentController::class);
             Route::resource('cabinets', \App\Http\Controllers\Admin\CabinetController::class);
+            Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
 
         });
 
