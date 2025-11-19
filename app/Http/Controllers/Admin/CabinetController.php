@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Cabinet;
+use App\Models\Department;
+
+class CabinetController extends Controller
+{
+    public function index()
+    {
+        $cabinets = Cabinet::with('department')->paginate(20);
+        return view('admin.cabinets.index', compact('cabinets'));
+    }
+
+    public function create()
+    {
+        $departments = Department::all();
+        return view('admin.cabinets.create', compact('departments'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'number' => 'required',
+            'desc' => 'nullable',
+            'dep_id' => 'required|exists:departments,id',
+        ]);
+
+        Cabinet::create($request->only('number', 'desc', 'dep_id'));
+
+        return redirect()->route('admin.cabinets.index');
+    }
+
+    public function edit(Cabinet $cabinet)
+    {
+        $departments = Department::all();
+        return view('admin.cabinets.edit', compact('cabinet', 'departments'));
+    }
+
+    public function update(Request $request, Cabinet $cabinet)
+    {
+        $request->validate([
+            'number' => 'required',
+            'desc' => 'nullable',
+            'dep_id' => 'required|exists:departments,id',
+        ]);
+
+        $cabinet->update($request->only('number', 'desc', 'dep_id'));
+
+        return redirect()->route('admin.cabinets.index');
+    }
+
+    public function destroy(Cabinet $cabinet)
+    {
+        $cabinet->delete();
+        return redirect()->route('admin.cabinets.index');
+    }
+}
