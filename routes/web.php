@@ -36,7 +36,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('departments', DepartmentController::class);
             Route::resource('cabinets', \App\Http\Controllers\Admin\CabinetController::class);
             Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
+            Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])
+                ->name('users.index');
 
+            Route::get('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])
+                ->name('users.show');
+
+            // DELETE TERM
+            Route::delete('terms/{term}', [\App\Http\Controllers\Admin\UserController::class, 'deleteTerm'])
+                ->name('users.term.delete');
         });
 
 });
