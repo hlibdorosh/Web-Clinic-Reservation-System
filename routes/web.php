@@ -45,9 +45,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // DELETE TERM
             Route::delete('terms/{term}', [\App\Http\Controllers\Admin\UserController::class, 'deleteTerm'])
                 ->name('users.term.delete');
+
+
+            Route::delete('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])
+                ->name('users.destroy');
         });
 
+
+    Route::middleware(['auth', 'verified', 'role:doctor'])
+        ->prefix('doctor')
+        ->name('doctor.')
+        ->group(function () {
+            Route::get('terms/create', [\App\Http\Controllers\Doctor\TermController::class, 'create'])
+                ->name('terms.create');
+
+            Route::post('terms', [\App\Http\Controllers\Doctor\TermController::class, 'store'])
+                ->name('terms.store');
+
+            Route::get('terms', [\App\Http\Controllers\Doctor\TermController::class, 'index'])
+                ->name('terms.index');
+            Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update']
+            )
+                ->name('doctor.terms.update');
+
+        });
+
+
 });
+
+
 
 
 

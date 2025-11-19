@@ -13,11 +13,13 @@ class Term extends Model
         'doc_id',
         'dep_id',
         'cab_id',
+        'date',
         'start_time',
         'end_time',
         'is_taken',
-        'desc',
+        'desc'
     ];
+
 
     public function doctor()
     {

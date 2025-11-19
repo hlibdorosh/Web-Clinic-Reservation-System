@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->unsignedBigInteger('dep_id')->nullable()->change();
+        Schema::table('terms', function (Blueprint $table) {
+            $table->date('date')->nullable()->after('cab_id');
         });
     }
 
     public function down()
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->unsignedBigInteger('dep_id')->nullable()->change();
+        Schema::table('terms', function (Blueprint $table) {
+            $table->dropColumn('date');
         });
     }
-
 
 };

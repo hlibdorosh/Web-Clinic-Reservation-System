@@ -45,8 +45,23 @@
                     <td>{{ $user->role }}</td>
                     <td class="text-right">
                         <a href="{{ route('admin.users.show', $user) }}" class="btn btn-sm">Open</a>
+
                     </td>
+                    <td>
+                        <form action="{{ route('admin.users.destroy', $user) }}"
+                              method="POST"
+                              onsubmit="return confirm('Delete this user?')">
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="text-red-600 hover:underline">Delete</button>
+                        </form>
+
+                    </td>>
+
+
                 </tr>
+
             @endforeach
             </tbody>
         </table>

@@ -37,7 +37,8 @@ class UserController extends Controller
     // PROFILE PAGE
     public function show(User $user)
     {
-        $terms = $user->terms()->with(['service', 'doctor', 'cabinet'])->get();
+        $terms = $user->terms()->with(['doctor', 'cabinet', 'department'])->get();
+
 
         return view('admin.users.show', compact('user', 'terms'));
     }
@@ -49,4 +50,23 @@ class UserController extends Controller
 
         return back()->with('success', 'Term deleted.');
     }
+
+    public function destroy(User $user)
+    {
+        // Запрещаем удалять себя самого
+        if (auth()->id() === $user->id) {
+            return back()->withErrors(['error' => 'You cannot delete yourself.']);
+        }
+        if ($user->role === 'admin') {
+            return back()->withErrors(['error' => 'Cannot delete other admins.']);
+        }
+
+
+        // Удаляем
+        $user->delete();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User deleted successfully.');
+    }
+
 }

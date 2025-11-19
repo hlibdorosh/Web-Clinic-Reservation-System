@@ -10,12 +10,37 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Navigation Links (Admin Only) -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if(Auth::user()->role === 'admin')
+
+                        <x-nav-link :href="route('admin.users.index')"
+                                    :active="request()->routeIs('admin.users.*')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.departments.index')"
+                                    :active="request()->routeIs('admin.departments.*')">
+                            {{ __('Departments') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.cabinets.index')"
+                                    :active="request()->routeIs('admin.cabinets.*')">
+                            {{ __('Cabinets') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.services.index')"
+                                    :active="request()->routeIs('admin.services.*')">
+                            {{ __('Services') }}
+                        </x-nav-link>
+
+                    @endif
                 </div>
+
             </div>
 
             <!-- Settings Dropdown -->
