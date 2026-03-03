@@ -1,3 +1,172 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─────────────────────────────────────────
+   Ocean Theme – CSS Custom Properties
+───────────────────────────────────────── */
+:root {
+    --ocean-50:  #f0fdff;
+    --ocean-100: #ccf7fe;
+    --ocean-200: #99edfc;
+    --ocean-300: #4dd9f5;
+    --ocean-400: #0fbedd;
+    --ocean-500: #03a2c1;
+    --ocean-600: #0582a3;
+    --ocean-700: #0a6884;
+    --ocean-800: #0f546b;
+    --ocean-900: #124659;
+    --ocean-950: #072d3d;
+}
+
+/* ─────────────────────────────────────────
+   Base
+───────────────────────────────────────── */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--ocean-50);
+        background-image:
+            radial-gradient(ellipse at 15% 15%, rgba(77, 217, 245, 0.07) 0%, transparent 55%),
+            radial-gradient(ellipse at 85% 80%, rgba(3, 162, 193, 0.06) 0%, transparent 55%);
+        min-height: 100vh;
+        color: #1e293b;
+    }
+
+    ::-webkit-scrollbar            { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track      { background: var(--ocean-50); }
+    ::-webkit-scrollbar-thumb      { background: var(--ocean-300); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover{ background: var(--ocean-500); }
+}
+
+/* ─────────────────────────────────────────
+   Components
+───────────────────────────────────────── */
+@layer components {
+
+    /* ── Buttons ───────────────────────── */
+    .btn {
+        @apply inline-flex items-center justify-center gap-1.5
+               px-4 py-2 rounded-lg text-sm font-semibold
+               text-white border border-transparent shadow-sm
+               cursor-pointer select-none
+               transition-all duration-150 ease-in-out;
+        background: linear-gradient(135deg, #0582a3 0%, #0a6884 100%);
+    }
+    .btn:hover {
+        background: linear-gradient(135deg, #03a2c1 0%, #0582a3 100%);
+        @apply -translate-y-px shadow-ocean;
+    }
+    .btn:focus  { @apply outline-none ring-2 ring-ocean-400 ring-offset-2; }
+    .btn:active { @apply translate-y-0; background: linear-gradient(135deg, #0a6884 0%, #0f546b 100%); }
+
+    .btn-sm {
+        @apply px-3 py-1.5 text-xs rounded-md;
+    }
+
+    .btn-outline {
+        @apply inline-flex items-center justify-center gap-1.5
+               px-4 py-2 rounded-lg text-sm font-semibold
+               bg-white border-2 border-ocean-400 text-ocean-700 shadow-sm
+               hover:bg-ocean-50 hover:border-ocean-500 hover:text-ocean-800 hover:-translate-y-px
+               focus:outline-none focus:ring-2 focus:ring-ocean-400 focus:ring-offset-2
+               active:translate-y-0 active:bg-ocean-100
+               cursor-pointer select-none
+               transition-all duration-150 ease-in-out;
+    }
+
+    /* ── Form Inputs ───────────────────── */
+    .input {
+        @apply block w-full px-3 py-2 rounded-lg text-sm text-gray-800
+               bg-white border border-ocean-200
+               placeholder-gray-400 shadow-sm
+               focus:outline-none focus:border-ocean-500 focus:ring-2 focus:ring-ocean-400/30
+               disabled:bg-ocean-50 disabled:text-gray-500 disabled:cursor-not-allowed
+               transition-all duration-150;
+    }
+
+    /* ── Tables ────────────────────────── */
+    .table {
+        @apply w-full text-sm text-left border-separate border-spacing-0
+               overflow-hidden rounded-xl;
+        box-shadow: 0 4px 24px -4px rgba(5,130,163,0.13), 0 1px 4px -1px rgba(5,130,163,0.08);
+    }
+    .table thead {
+        background: linear-gradient(90deg, #0f546b 0%, #0a6884 55%, #0582a3 100%);
+    }
+    .table thead th {
+        @apply px-5 py-3.5 text-xs font-semibold text-white uppercase tracking-wider
+               border-b border-ocean-700/40;
+    }
+    .table thead th:first-child { @apply rounded-tl-xl; }
+    .table thead th:last-child  { @apply rounded-tr-xl; }
+
+    .table tbody tr {
+        @apply bg-white border-b border-ocean-50/80 transition-colors duration-100;
+    }
+    .table tbody tr:hover { @apply bg-ocean-50; }
+    .table tbody tr:last-child td { @apply border-b-0; }
+    .table tbody tr:last-child td:first-child { @apply rounded-bl-xl; }
+    .table tbody tr:last-child td:last-child  { @apply rounded-br-xl; }
+
+    .table tbody td {
+        @apply px-5 py-3.5 text-gray-700;
+    }
+
+    /* ── Cards ─────────────────────────── */
+    .card {
+        @apply bg-white rounded-2xl border border-ocean-100 overflow-hidden;
+        box-shadow: 0 4px 24px -4px rgba(5,130,163,0.12), 0 1px 4px -1px rgba(5,130,163,0.07);
+    }
+    .card:hover {
+        box-shadow: 0 8px 36px -4px rgba(5,130,163,0.17), 0 2px 8px -2px rgba(5,130,163,0.10);
+    }
+
+    /* ── Badges ────────────────────────── */
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full
+               text-xs font-semibold bg-ocean-100 text-ocean-800;
+    }
+    .badge-success { @apply bg-emerald-100 text-emerald-800; }
+    .badge-warning { @apply bg-amber-100 text-amber-800; }
+    .badge-danger  { @apply bg-red-100 text-red-800; }
+    .badge-info    { @apply bg-sky-100 text-sky-800; }
+
+    /* ── Page wrapper ──────────────────── */
+    .page-section {
+        @apply py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
+    }
+
+    /* ── Page header heading override ─── */
+    .page-header-bar h1,
+    .page-header-bar h2,
+    .page-header-bar h3 {
+        color: var(--ocean-900) !important;
+        font-weight: 700;
+        font-size: 1.125rem;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    /* ── Section heading ───────────────── */
+    .page-title {
+        @apply text-2xl font-bold text-ocean-900 mb-1;
+    }
+    .page-subtitle {
+        @apply text-sm text-ocean-600 mb-6;
+    }
+
+    /* ── Alert boxes ───────────────────── */
+    .alert-success {
+        @apply rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800;
+    }
+    .alert-error {
+        @apply rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800;
+    }
+    .alert-info {
+        @apply rounded-xl border border-ocean-200 bg-ocean-50 px-4 py-3 text-sm text-ocean-800;
+    }
+}

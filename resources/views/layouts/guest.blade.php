@@ -15,14 +15,26 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0"
+             style="background: linear-gradient(160deg, #f0fdff 0%, #ccf7fe 40%, #e8fbff 70%, #f0fdff 100%);">
+
+            <!-- Decorative blobs -->
+            <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-30"
+                     style="background: radial-gradient(circle, #4dd9f5 0%, transparent 70%);"></div>
+                <div class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full opacity-20"
+                     style="background: radial-gradient(circle, #0582a3 0%, transparent 70%);"></div>
+            </div>
+
+            <div class="relative z-10">
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <x-application-logo class="w-16 h-16 fill-current text-ocean-600" />
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="relative z-10 w-full sm:max-w-md mt-6 px-6 py-8 bg-white/80 backdrop-blur-md
+                        overflow-hidden sm:rounded-2xl border border-ocean-100"
+                 style="box-shadow: 0 8px 40px -4px rgba(5,130,163,0.20), 0 2px 12px -2px rgba(5,130,163,0.12);">
                 {{ $slot }}
             </div>
         </div>
