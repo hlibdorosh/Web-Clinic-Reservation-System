@@ -10,13 +10,39 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links (Admin Only) -->
+                <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    @if(Auth::user()->role === 'admin')
+                    {{-- USER --}}
+                    @if(Auth::user()->role === 'patient')
+                        <x-nav-link :href="route('user.terms.index')"
+                                    :active="request()->routeIs('user.terms.*')">
+                            {{ __('Browse Terms') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('user.reservations.index')"
+                                    :active="request()->routeIs('user.reservations.*')">
+                            {{ __('My Reservations') }}
+                        </x-nav-link>
+                    @endif
+
+
+                    {{-- DOCTOR --}}
+                    @if(auth()->check() && auth()->user()->role === 'doctor')
+                        <x-nav-link :href="route('doctor.terms.index')" :active="request()->routeIs('doctor.terms.*')">
+                            {{ __('My Terms') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('doctor.terms.create')" :active="request()->routeIs('doctor.terms.create')">
+                            {{ __('Add Term') }}
+                        </x-nav-link>
+                    @endif
+                    {{-- ADMIN --}}
+                @if(Auth::user()->role === 'admin')
 
                         <x-nav-link :href="route('admin.users.index')"
                                     :active="request()->routeIs('admin.users.*')">
@@ -41,7 +67,8 @@
                     @endif
                 </div>
 
-            </div>
+
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -95,6 +122,19 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            {{-- USER --}}
+            @if(Auth::user()->role === 'patient')
+                <x-responsive-nav-link :href="route('user.terms.index')"
+                                       :active="request()->routeIs('user.terms.*')">
+                    {{ __('Browse Terms') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('user.reservations.index')"
+                                       :active="request()->routeIs('user.reservations.*')">
+                    {{ __('My Reservations') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

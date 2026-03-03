@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Term;
+use App\Models\Department;
 use App\Models\Cabinet;
+use App\Models\Term;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class TermController extends Controller
 {
     public function index()
     {
         $terms = Term::where('doc_id', auth()->id())
+            ->with(['reservations.patient', 'reservations.service', 'cabinet', 'department'])
+            ->orderBy('date', 'desc')
             ->orderBy('start_time')
             ->get();
 

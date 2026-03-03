@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DepartmentController;
-
+use App\Http\Controllers\User\TermBrowseController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -67,8 +67,39 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update']
             )
                 ->name('doctor.terms.update');
+            Route::get('terms/{term}/edit', [\App\Http\Controllers\Doctor\TermController::class, 'edit'])
+                ->name('terms.edit');
+
+            Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update'])
+                ->name('terms.update'); // ⚠️ без "doctor." внутри
+
 
         });
+
+    Route::middleware(['auth', 'verified', 'role:patient'])
+        ->prefix('user')
+        ->name('user.')
+        ->group(function () {
+            Route::get('terms', [TermBrowseController::class, 'index'])->name('terms.index');
+
+            // Reservations
+            Route::get('reservations', [\App\Http\Controllers\User\ReservationController::class, 'index'])
+                ->name('reservations.index');
+            Route::get('reservations/create/{term}', [\App\Http\Controllers\User\ReservationController::class, 'create'])
+                ->name('reservations.create');
+            Route::post('reservations', [\App\Http\Controllers\User\ReservationController::class, 'store'])
+                ->name('reservations.store');
+            Route::delete('reservations/{reservation}', [\App\Http\Controllers\User\ReservationController::class, 'cancel'])
+                ->name('reservations.cancel');
+        });
+    Route::middleware(['auth', 'verified'])
+        ->prefix('doctors')
+        ->name('doctors.')
+        ->group(function () {
+            Route::get('{user}', [\App\Http\Controllers\User\DoctorProfileController::class, 'show'])
+                ->name('show');
+        });
+
 
 
 });
