@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\Term;
 use App\Models\Service;
+use App\Notifications\ReservationMade;
+use App\Notifications\ReservationCancelledByPatient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,8 +63,7 @@ class ReservationController extends Controller
 
         DB::beginTransaction();
         try {
-            // Create reservation
-            Reservation::create([
+            $reservation = Reservation::create([
                 'term_id' => $request->term_id,
                 'patient_id' => auth()->id(),
                 'serv_id' => $request->serv_id,
@@ -73,13 +74,21 @@ class ReservationController extends Controller
             $term->update(['is_taken' => true]);
 
             DB::commit();
-
-            return redirect()->route('user.reservations.index')
-                ->with('success', 'Reservation created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Failed to create reservation');
         }
+
+        // Notify the doctor (outside transaction so a failure doesn't roll back the booking)
+        try {
+            $reservation->load(['patient', 'service', 'term.doctor', 'term.department', 'term.cabinet']);
+            $term->doctor->notify(new ReservationMade($reservation));
+        } catch (\Exception $e) {
+            // Notification failure should not affect the booking
+        }
+
+        return redirect()->route('user.reservations.index')
+            ->with('success', 'Reservation created successfully');
     }
 
     public function cancel(Reservation $reservation)
@@ -89,16 +98,20 @@ class ReservationController extends Controller
             abort(403);
         }
 
+        $reservation->load(['patient', 'service', 'term.doctor', 'term.department', 'term.cabinet']);
+        $term = $reservation->term;
+
+        // Notify the doctor before deleting
+        try {
+            $term->doctor->notify(new ReservationCancelledByPatient($reservation));
+        } catch (\Exception $e) {
+            // Notification failure should not affect the cancellation
+        }
+
         DB::beginTransaction();
         try {
-            $term = $reservation->term;
-
-            // Delete reservation
             $reservation->delete();
-
-            // Mark term as available again
             $term->update(['is_taken' => false]);
-
             DB::commit();
 
             return back()->with('success', 'Reservation cancelled successfully');

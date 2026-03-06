@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Models\Department;
 use App\Models\Cabinet;
 use App\Models\Term;
+use App\Notifications\TermCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -116,7 +117,7 @@ class TermController extends Controller
         }
 
         // Создание слота
-        Term::create([
+        $term = Term::create([
             'doc_id' => $doctorId,
             'dep_id' => $request->dep_id,   // ✔ теперь выбирает доктор
             'cab_id' => $request->cab_id,
@@ -127,6 +128,9 @@ class TermController extends Controller
             'desc' => $request->desc,
         ]);
 
+
+        $term->load(['department', 'cabinet']);
+        auth()->user()->notify(new TermCreated($term));
 
         return redirect()->route('doctor.terms.index')
             ->with('success', 'Term created');

@@ -9,16 +9,22 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $role = Auth::user()->role;
+    $user = Auth::user();
+    $notifications = $user->notifications()->latest()->take(30)->get();
 
-    if ($role === 'admin') {
-        return view('dashboard_admin');
-    } elseif ($role === 'doctor') {
-        return view('dashboard_doctor');
+    if ($user->role === 'admin') {
+        return view('dashboard_admin', compact('notifications'));
+    } elseif ($user->role === 'doctor') {
+        return view('dashboard_doctor', compact('notifications'));
     } else {
-        return view('dashboard');
+        return view('dashboard', compact('notifications'));
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post('/notifications/mark-all-read', function () {
+    Auth::user()->unreadNotifications->markAsRead();
+    return back();
+})->middleware(['auth'])->name('notifications.markAllRead');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -73,7 +79,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update'])
                 ->name('terms.update'); // ⚠️ без "doctor." внутри
 
-
+            Route::patch('reservations/{reservation}/confirm', [\App\Http\Controllers\Doctor\ReservationController::class, 'confirm'])
+                ->name('reservations.confirm');
+            Route::patch('reservations/{reservation}/cancel', [\App\Http\Controllers\Doctor\ReservationController::class, 'cancel'])
+                ->name('reservations.cancel');
         });
 
     Route::middleware(['auth', 'verified', 'role:patient'])

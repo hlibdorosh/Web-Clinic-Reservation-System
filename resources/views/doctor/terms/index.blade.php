@@ -8,6 +8,12 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
 
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div>
                 <a href="{{ route('doctor.terms.create') }}"
                    class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -27,7 +33,7 @@
                             <th class="py-2">Status</th>
                             <th class="py-2">Patient</th>
                             <th class="py-2">Service</th>
-                            <th class="py-2">Actions</th>
+                            <th class="py-2">Reservation Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -51,10 +57,7 @@
                                 <td class="py-2">
                                     @if($term->reservations->isNotEmpty())
                                         @foreach($term->reservations as $reservation)
-                                            <div class="mb-1">
-                                                {{ $reservation->patient?->name ?? '-' }}
-                                                <span class="text-xs text-gray-500">({{ ucfirst($reservation->state) }})</span>
-                                            </div>
+                                            <div class="mb-1">{{ $reservation->patient?->name ?? '-' }}</div>
                                         @endforeach
                                     @else
                                         <span class="text-gray-400">-</span>
@@ -69,14 +72,40 @@
                                         <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
-                                <td class="py-2">
-                                    @if(!$term->is_taken)
-                                        <a href="{{ route('doctor.terms.edit', $term) }}"
-                                           class="text-blue-600 hover:underline text-xs">
-                                            Edit
-                                        </a>
+                                <td class="py-2 space-y-1">
+                                    @if($term->reservations->isNotEmpty())
+                                        @foreach($term->reservations as $reservation)
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-2 py-0.5 rounded text-xs font-medium
+                                                    {{ $reservation->state === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                    {{ $reservation->state === 'confirmed' ? 'bg-green-100 text-green-800' : '' }}
+                                                    {{ $reservation->state === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
+                                                ">{{ ucfirst($reservation->state) }}</span>
+
+                                                @if($reservation->state === 'pending')
+                                                    <form method="POST" action="{{ route('doctor.reservations.confirm', $reservation) }}">
+                                                        @csrf @method('PATCH')
+                                                        <button type="submit" class="px-2 py-0.5 bg-green-600 text-white rounded text-xs hover:bg-green-700">
+                                                            Confirm
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('doctor.reservations.cancel', $reservation) }}"
+                                                          onsubmit="return confirm('Cancel this reservation?')">
+                                                        @csrf @method('PATCH')
+                                                        <button type="submit" class="px-2 py-0.5 bg-red-600 text-white rounded text-xs hover:bg-red-700">
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        @endforeach
                                     @else
-                                        <span class="text-gray-400 text-xs">Locked</span>
+                                        @if(!$term->is_taken)
+                                            <a href="{{ route('doctor.terms.edit', $term) }}"
+                                               class="text-blue-600 hover:underline text-xs">Edit</a>
+                                        @else
+                                            <span class="text-gray-400 text-xs">Locked</span>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>

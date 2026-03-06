@@ -10,6 +10,13 @@
             Email: {{ $user->email }}
         </p>
 
+        @if($user->bio)
+        <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <h3 class="text-md font-semibold text-gray-700 mb-2">About</h3>
+            <p class="text-gray-600 whitespace-pre-line">{{ $user->bio }}</p>
+        </div>
+        @endif
+
         <h3 class="text-lg font-semibold mb-2">Available Terms</h3>
 
         <table class="w-full border">

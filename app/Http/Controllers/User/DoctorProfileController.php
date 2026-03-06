@@ -21,3 +21,4 @@ class DoctorProfileController extends Controller
         return view('user.doctors.show', compact('user', 'terms'));
     }
 }
+

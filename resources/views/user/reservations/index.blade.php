@@ -55,7 +55,14 @@
                                     {{ $reservation->term->start_time }} - {{ $reservation->term->end_time }}
                                 </td>
                                 <td class="py-2">
-                                    {{ $reservation->term->doctor?->name ?? '-' }}
+                                    @if($reservation->term->doctor)
+                                        <a href="{{ route('doctors.show', $reservation->term->doctor) }}"
+                                           class="text-blue-600 hover:underline">
+                                            {{ $reservation->term->doctor->name }}
+                                        </a>
+                                    @else
+                                        -
+                                    @endif
                                 </td>
                                 <td class="py-2">
                                     {{ $reservation->term->department?->name ?? '-' }}
