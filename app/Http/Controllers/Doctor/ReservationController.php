@@ -18,11 +18,7 @@ class ReservationController extends Controller
 
         $reservation->update(['state' => 'confirmed']);
 
-        try {
-            $reservation->patient->notify(new ReservationConfirmed($reservation));
-        } catch (\Exception $e) {
-            // Notification failure should not affect the confirmation
-        }
+        $reservation->patient->notify(new ReservationConfirmed($reservation));
 
         return back()->with('success', 'Reservation confirmed.');
     }
