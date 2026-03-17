@@ -79,6 +79,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update'])
                 ->name('terms.update'); // ⚠️ без "doctor." внутри
 
+            Route::delete('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'destroy'])
+                ->name('terms.destroy');
+
             Route::patch('reservations/{reservation}/confirm', [\App\Http\Controllers\Doctor\ReservationController::class, 'confirm'])
                 ->name('reservations.confirm');
             Route::patch('reservations/{reservation}/cancel', [\App\Http\Controllers\Doctor\ReservationController::class, 'cancel'])

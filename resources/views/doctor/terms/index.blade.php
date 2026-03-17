@@ -100,12 +100,15 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        @if(!$term->is_taken)
+                                        <div class="flex items-center gap-2">
                                             <a href="{{ route('doctor.terms.edit', $term) }}"
                                                class="text-blue-600 hover:underline text-xs">Edit</a>
-                                        @else
-                                            <span class="text-gray-400 text-xs">Locked</span>
-                                        @endif
+                                            <form method="POST" action="{{ route('doctor.terms.destroy', $term) }}"
+                                                  onsubmit="return confirm('Delete this term?')" style="display:inline;">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:underline text-xs">Delete</button>
+                                            </form>
+                                        </div>
                                     @endif
                                 </td>
                             </tr>

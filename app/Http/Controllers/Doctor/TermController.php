@@ -51,6 +51,10 @@ class TermController extends Controller
             'desc' => 'nullable',
         ]);
 
+        // Убедиться, что время в формате H:i без секунд
+        $start_time = substr($request->start_time, 0, 5);
+        $end_time = substr($request->end_time, 0, 5);
+
         // Проверка конфликта термина, исключая сам себя
         $conflict = Term::where('id', '!=', $term->id)
             ->where('date', $request->date)
@@ -58,12 +62,12 @@ class TermController extends Controller
                 $q->where('doc_id', $term->doc_id)
                     ->orWhere('cab_id', $request->cab_id);
             })
-            ->where(function ($q) use ($request) {
-                $q->whereBetween('start_time', [$request->start_time, $request->end_time])
-                    ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-                    ->orWhere(function ($x) use ($request) {
-                        $x->where('start_time', '<=', $request->start_time)
-                            ->where('end_time', '>=', $request->end_time);
+            ->where(function ($q) use ($start_time, $end_time) {
+                $q->whereBetween('start_time', [$start_time, $end_time])
+                    ->orWhereBetween('end_time', [$start_time, $end_time])
+                    ->orWhere(function ($x) use ($start_time, $end_time) {
+                        $x->where('start_time', '<=', $start_time)
+                            ->where('end_time', '>=', $end_time);
                     });
             })
             ->first();
@@ -74,7 +78,14 @@ class TermController extends Controller
                 ->withInput();
         }
 
-        $term->update($request->all());
+        $term->update([
+            'date' => $request->date,
+            'dep_id' => $request->dep_id,
+            'cab_id' => $request->cab_id,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'desc' => $request->desc,
+        ]);
 
         return redirect()->route('doctor.terms.index')->with('success', 'Term updated');
     }
@@ -93,18 +104,22 @@ class TermController extends Controller
 
         $doctorId = auth()->id();
 
+        // Убедиться, что время в формате H:i без секунд
+        $start_time = substr($request->start_time, 0, 5);
+        $end_time = substr($request->end_time, 0, 5);
+
         // Проверяем конфликт времени: тот же врач или тот же кабинет
         $conflict = Term::where('date', $request->date)
             ->where(function ($q) use ($doctorId, $request) {
                 $q->where('doc_id', $doctorId)
                     ->orWhere('cab_id', $request->cab_id);
             })
-            ->where(function ($q) use ($request) {
-                $q->whereBetween('start_time', [$request->start_time, $request->end_time])
-                    ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-                    ->orWhere(function ($x) use ($request) {
-                        $x->where('start_time', '<=', $request->start_time)
-                            ->where('end_time', '>=', $request->end_time);
+            ->where(function ($q) use ($start_time, $end_time) {
+                $q->whereBetween('start_time', [$start_time, $end_time])
+                    ->orWhereBetween('end_time', [$start_time, $end_time])
+                    ->orWhere(function ($x) use ($start_time, $end_time) {
+                        $x->where('start_time', '<=', $start_time)
+                            ->where('end_time', '>=', $end_time);
                     });
             })
             ->first();
@@ -122,8 +137,8 @@ class TermController extends Controller
             'dep_id' => $request->dep_id,   // ✔ теперь выбирает доктор
             'cab_id' => $request->cab_id,
             'date' => $request->date,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
             'is_taken' => 0,
             'desc' => $request->desc,
         ]);
@@ -135,5 +150,24 @@ class TermController extends Controller
         return redirect()->route('doctor.terms.index')
             ->with('success', 'Term created');
 
+    }
+
+    public function destroy(Term $term)
+    {
+        // Убедиться, что это термин текущего врача
+        if ($term->doc_id !== auth()->id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Проверить, есть ли зарезервированные слоты
+        if ($term->reservations()->count() > 0) {
+            return back()
+                ->withErrors(['delete' => 'Cannot delete a term with existing reservations']);
+        }
+
+        $term->delete();
+
+        return redirect()->route('doctor.terms.index')
+            ->with('success', 'Term deleted successfully');
     }
 }
