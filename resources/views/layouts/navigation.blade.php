@@ -36,6 +36,11 @@
                                     :active="request()->routeIs('user.reservations.*')">
                             {{ __('My Reservations') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('user.patient-info.edit')"
+                                    :active="request()->routeIs('user.patient-info.*')">
+                            {{ __('My Health Info') }}
+                        </x-nav-link>
                     @endif
 
                     {{-- DOCTOR --}}
@@ -145,6 +150,11 @@
                 <x-responsive-nav-link :href="route('user.reservations.index')"
                                        :active="request()->routeIs('user.reservations.*')">
                     {{ __('My Reservations') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('user.patient-info.edit')"
+                                       :active="request()->routeIs('user.patient-info.*')">
+                    {{ __('My Health Info') }}
                 </x-responsive-nav-link>
             @endif
         </div>

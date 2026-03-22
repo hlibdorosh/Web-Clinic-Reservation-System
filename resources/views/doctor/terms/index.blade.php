@@ -57,7 +57,15 @@
                                 <td class="py-2">
                                     @if($term->reservations->isNotEmpty())
                                         @foreach($term->reservations as $reservation)
-                                            <div class="mb-1">{{ $reservation->patient?->name ?? '-' }}</div>
+                                            <div class="mb-1">
+                                                @if($reservation->patient)
+                                                    <a href="{{ route('doctor.patients.info', $reservation->patient) }}" class="text-blue-600 hover:underline font-medium">
+                                                        {{ $reservation->patient->name }}
+                                                    </a>
+                                                @else
+                                                    -
+                                                @endif
+                                            </div>
                                         @endforeach
                                     @else
                                         <span class="text-gray-400">-</span>
@@ -75,12 +83,16 @@
                                 <td class="py-2 space-y-1">
                                     @if($term->reservations->isNotEmpty())
                                         @foreach($term->reservations as $reservation)
-                                            <div class="flex items-center gap-2">
+                                            <div class="flex items-center gap-2 flex-wrap">
                                                 <span class="px-2 py-0.5 rounded text-xs font-medium
                                                     {{ $reservation->state === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
                                                     {{ $reservation->state === 'confirmed' ? 'bg-green-100 text-green-800' : '' }}
                                                     {{ $reservation->state === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
                                                 ">{{ ucfirst($reservation->state) }}</span>
+
+                                                <a href="{{ route('doctor.patients.info', $reservation->patient) }}" class="px-2 py-0.5 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
+                                                    View Info
+                                                </a>
 
                                                 @if($reservation->state === 'pending')
                                                     <form method="POST" action="{{ route('doctor.reservations.confirm', $reservation) }}">

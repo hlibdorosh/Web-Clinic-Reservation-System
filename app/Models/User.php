@@ -49,6 +49,11 @@ class User extends Authenticatable
     }
 
     // === Relationships ===
+    public function patientInfo()
+    {
+        return $this->hasOne(PatientInfo::class);
+    }
+
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'patient_id');

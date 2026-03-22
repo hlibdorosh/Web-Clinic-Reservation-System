@@ -86,6 +86,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('reservations.confirm');
             Route::patch('reservations/{reservation}/cancel', [\App\Http\Controllers\Doctor\ReservationController::class, 'cancel'])
                 ->name('reservations.cancel');
+
+            // Patient Info
+            Route::get('patients/{user}/info', [\App\Http\Controllers\Doctor\PatientInfoController::class, 'show'])
+                ->name('patients.info');
         });
 
     Route::middleware(['auth', 'verified', 'role:patient'])
@@ -93,6 +97,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('user.')
         ->group(function () {
             Route::get('terms', [TermBrowseController::class, 'index'])->name('terms.index');
+
+            // Patient Info
+            Route::get('patient-info', [\App\Http\Controllers\User\PatientInfoController::class, 'edit'])->name('patient-info.edit');
+            Route::put('patient-info', [\App\Http\Controllers\User\PatientInfoController::class, 'update'])->name('patient-info.update');
 
             // Reservations
             Route::get('reservations', [\App\Http\Controllers\User\ReservationController::class, 'index'])
