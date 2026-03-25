@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>InterKlinik</title>
+        <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,10 +27,12 @@
                      style="background: radial-gradient(circle, #0582a3 0%, transparent 70%);"></div>
             </div>
 
-            <div class="relative z-10">
-                <a href="/">
-                    <x-application-logo class="w-16 h-16 fill-current text-ocean-600" />
-                </a>
+            <div class="relative z-10 flex items-center gap-3">
+                <img src="{{ asset('logo.png') }}" alt="InterKlinik" class="w-16 h-16">
+                <div>
+                    <h1 class="text-2xl font-bold text-ocean-600">InterKlinik</h1>
+                    <p class="text-xs text-ocean-500">Medical Clinic</p>
+                </div>
             </div>
 
             <div class="relative z-10 w-full sm:max-w-md mt-6 px-6 py-8 bg-white/80 backdrop-blur-md
