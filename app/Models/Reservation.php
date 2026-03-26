@@ -14,6 +14,7 @@ class Reservation extends Model
         'patient_id',
         'serv_id',
         'state',
+        'info',
     ];
 
     public function term()

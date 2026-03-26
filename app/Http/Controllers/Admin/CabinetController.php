@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cabinet;
 use App\Models\Department;
+use App\Models\User;
+use App\Notifications\CabinetCreated;
 
 class CabinetController extends Controller
 {
@@ -29,7 +31,13 @@ class CabinetController extends Controller
             'dep_id' => 'required|exists:departments,id',
         ]);
 
-        Cabinet::create($request->only('number', 'desc', 'dep_id'));
+        $cabinet = Cabinet::create($request->only('number', 'desc', 'dep_id'));
+
+        // Notify all admins
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new CabinetCreated($cabinet));
+        }
 
         return redirect()->route('admin.cabinets.index');
     }

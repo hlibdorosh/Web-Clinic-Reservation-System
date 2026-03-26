@@ -51,6 +51,36 @@ class UserController extends Controller
         return back()->with('success', 'Term deleted.');
     }
 
+    // UPDATE USER ROLE TO DOCTOR
+    public function updateRole(Request $request, User $user)
+    {
+        // Cannot promote yourself
+        if (auth()->id() === $user->id) {
+            return back()->withErrors(['error' => 'You cannot change your own role.']);
+        }
+
+        // Cannot change admin role
+        if ($user->role === 'admin') {
+            return back()->withErrors(['error' => 'Cannot change admin role.']);
+        }
+
+        // Only allow promoting patients to doctors
+        if ($user->role !== 'patient') {
+            return back()->withErrors(['error' => 'Only patients can be promoted to doctors.']);
+        }
+
+        // Check if user has any active terms/reservations as a patient
+        $hasReservations = $user->reservations()->exists();
+        if ($hasReservations) {
+            return back()->withErrors(['error' => 'Cannot promote user with active reservations.']);
+        }
+
+        // Update role to doctor
+        $user->update(['role' => 'doctor']);
+
+        return back()->with('success', 'User promoted to doctor successfully.');
+    }
+
     public function destroy(User $user)
     {
         // Запрещаем удалять себя самого

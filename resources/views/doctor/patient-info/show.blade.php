@@ -91,6 +91,70 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Patient Reservations History --}}
+            <div class="mt-6 p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Visit History') }}</h3>
+
+                    @if($reservations->isEmpty())
+                        <p class="text-sm text-gray-500">{{ __('No reservations found for this patient.') }}</p>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr class="text-left border-b">
+                                        <th class="py-2 px-2">{{ __('Date') }}</th>
+                                        <th class="py-2 px-2">{{ __('Time') }}</th>
+                                        <th class="py-2 px-2">{{ __('Service') }}</th>
+                                        <th class="py-2 px-2">{{ __('Department') }}</th>
+                                        <th class="py-2 px-2">{{ __('Cabinet') }}</th>
+                                        <th class="py-2 px-2">{{ __('Status') }}</th>
+                                        <th class="py-2 px-2">{{ __('Action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($reservations as $reservation)
+                                        <tr class="border-b">
+                                            <td class="py-2 px-2">
+                                                {{ optional($reservation->term->date)->format('Y-m-d') ?? $reservation->term->date }}
+                                            </td>
+                                            <td class="py-2 px-2">
+                                                {{ $reservation->term->start_time }} - {{ $reservation->term->end_time }}
+                                            </td>
+                                            <td class="py-2 px-2">
+                                                {{ $reservation->service?->name ?? '-' }}
+                                            </td>
+                                            <td class="py-2 px-2">
+                                                {{ $reservation->term->department?->name ?? '-' }}
+                                            </td>
+                                            <td class="py-2 px-2">
+                                                {{ $reservation->term->cabinet?->number ?? $reservation->term->cab_id }}
+                                            </td>
+                                            <td class="py-2 px-2">
+                                                <span class="px-2 py-1 rounded text-xs font-medium
+                                                    {{ $reservation->state === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                    {{ $reservation->state === 'confirmed' ? 'bg-green-100 text-green-800' : '' }}
+                                                    {{ $reservation->state === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
+                                                ">
+                                                    {{ ucfirst($reservation->state) }}
+                                                </span>
+                                            </td>
+                                            <td class="py-2 px-2">
+                                                <a href="{{ route('doctor.reservations.showInfo', $reservation) }}" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 font-medium">
+                                                    Conclusion
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

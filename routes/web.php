@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\User\TermBrowseController;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -48,6 +50,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])
                 ->name('users.show');
 
+            // UPDATE USER ROLE
+            Route::patch('users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])
+                ->name('users.updateRole');
+
             // DELETE TERM
             Route::delete('terms/{term}', [\App\Http\Controllers\Admin\UserController::class, 'deleteTerm'])
                 ->name('users.term.delete');
@@ -87,6 +93,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::patch('reservations/{reservation}/cancel', [\App\Http\Controllers\Doctor\ReservationController::class, 'cancel'])
                 ->name('reservations.cancel');
 
+            Route::get('reservations/{reservation}/info', [\App\Http\Controllers\Doctor\ReservationController::class, 'showInfo'])
+                ->name('reservations.showInfo');
+            Route::patch('reservations/{reservation}/info', [\App\Http\Controllers\Doctor\ReservationController::class, 'updateInfo'])
+                ->name('reservations.updateInfo');
+
             // Patient Info
             Route::get('patients/{user}/info', [\App\Http\Controllers\Doctor\PatientInfoController::class, 'show'])
                 ->name('patients.info');
@@ -111,6 +122,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('reservations.store');
             Route::delete('reservations/{reservation}', [\App\Http\Controllers\User\ReservationController::class, 'cancel'])
                 ->name('reservations.cancel');
+            Route::get('reservations/{reservation}/info', [\App\Http\Controllers\Doctor\ReservationController::class, 'showInfo'])
+                ->name('reservations.showInfo');
         });
     Route::middleware(['auth', 'verified'])
         ->prefix('doctors')

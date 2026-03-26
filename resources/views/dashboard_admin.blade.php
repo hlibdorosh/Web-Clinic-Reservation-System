@@ -1,10 +1,16 @@
-{{-- dashboard_user.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
-        <h2>Панель admin</h2>
-
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Панель администратора
+        </h2>
     </x-slot>
-    <div class="p-6">Добро пожаловать, {{ Auth::user()->name }}</div>
+
+    <div class="py-6">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
+            <p class="text-gray-600">Добро пожаловать, {{ Auth::user()->name }}</p>
+            <x-notifications-panel :notifications="$notifications" />
+        </div>
+    </div>
 
 </x-app-layout>
 

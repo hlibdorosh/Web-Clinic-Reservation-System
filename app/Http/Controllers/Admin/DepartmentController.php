@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Department; // ← ЭТО НУЖНО
+use App\Models\Department;
+use App\Models\User;
+use App\Notifications\DepartmentCreated;
 
 class DepartmentController extends Controller
 {
@@ -26,7 +28,13 @@ class DepartmentController extends Controller
             'desc' => 'nullable',
         ]);
 
-        Department::create($request->only('name', 'desc'));
+        $department = Department::create($request->only('name', 'desc'));
+
+        // Notify all admins
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new DepartmentCreated($department));
+        }
 
         return redirect()->route('admin.departments.index');
     }

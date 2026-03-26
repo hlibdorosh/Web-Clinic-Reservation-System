@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -55,6 +55,20 @@
                 placeholder="Write a short bio that patients will see on your profile..."
             >{{ old('bio', $user->bio) }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('bio')" />
+        </div>
+
+        <div>
+            <x-input-label for="photo" :value="__('Profile Photo')" />
+
+            @if($user->photo)
+                <div class="mt-4 mb-4">
+                    <img src="{{ asset('storage/' . $user->photo) }}" alt="Profile Photo" class="h-32 w-32 object-cover rounded-lg">
+                </div>
+            @endif
+
+            <input id="photo" name="photo" type="file" class="mt-1 block w-full" accept="image/*" />
+            <p class="text-xs text-gray-500 mt-2">Accepted formats: JPG, PNG, GIF. Max size: 10MB</p>
+            <x-input-error class="mt-2" :messages="$errors->get('photo')" />
         </div>
         @endif
 

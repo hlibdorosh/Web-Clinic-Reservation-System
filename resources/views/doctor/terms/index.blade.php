@@ -90,8 +90,9 @@
                                                     {{ $reservation->state === 'cancelled' ? 'bg-red-100 text-red-800' : '' }}
                                                 ">{{ ucfirst($reservation->state) }}</span>
 
-                                                <a href="{{ route('doctor.patients.info', $reservation->patient) }}" class="px-2 py-0.5 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
-                                                    View Info
+
+                                                <a href="{{ route('doctor.reservations.showInfo', $reservation) }}" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 font-medium">
+                                                    Conclusion
                                                 </a>
 
                                                 @if($reservation->state === 'pending')

@@ -6,16 +6,34 @@
     </x-slot>
 
     <div class="p-6">
-        <p class="text-gray-600 mb-4">
-            Email: {{ $user->email }}
-        </p>
+        <div class="flex gap-6 mb-6">
+            {{-- Doctor Photo --}}
+            @if($user->photo)
+                <div class="flex-shrink-0">
+                    <img src="{{ asset('storage/' . $user->photo) }}"
+                         alt="{{ $user->name }}"
+                         class="h-48 w-48 object-cover rounded-lg shadow-md flex-shrink-0">
+                </div>
+            @else
+                <div class="flex-shrink-0 h-48 w-48 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
+                    <span class="text-gray-500">No photo</span>
+                </div>
+            @endif
 
-        @if($user->bio)
-        <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h3 class="text-md font-semibold text-gray-700 mb-2">About</h3>
-            <p class="text-gray-600 whitespace-pre-line">{{ $user->bio }}</p>
+            {{-- Doctor Info --}}
+            <div class="flex-1">
+                <p class="text-gray-600 mb-4">
+                    <strong>Email:</strong> {{ $user->email }}
+                </p>
+
+                @if($user->bio)
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <h3 class="text-md font-semibold text-gray-700 mb-2">About</h3>
+                        <p class="text-gray-600 whitespace-pre-line">{{ $user->bio }}</p>
+                    </div>
+                @endif
+            </div>
         </div>
-        @endif
 
         <h3 class="text-lg font-semibold mb-2">Available Terms</h3>
 

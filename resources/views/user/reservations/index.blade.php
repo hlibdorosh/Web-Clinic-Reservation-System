@@ -83,17 +83,22 @@
                                     </span>
                                 </td>
                                 <td class="py-2">
-                                    @if($reservation->state === 'pending')
-                                        <form method="POST" action="{{ route('user.reservations.cancel', $reservation) }}"
-                                              onsubmit="return confirm('Are you sure you want to cancel this reservation?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs">
-                                                Cancel
-                                            </button>
-                                        </form>
-                                    @endif
+                                    <div class="flex flex-col gap-2">
+                                        <a href="{{ route('user.reservations.showInfo', $reservation) }}" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 font-medium text-center">
+                                            Conclusion
+                                        </a>
+                                        @if($reservation->state === 'pending')
+                                            <form method="POST" action="{{ route('user.reservations.cancel', $reservation) }}"
+                                                  onsubmit="return confirm('Are you sure you want to cancel this reservation?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
