@@ -49,6 +49,10 @@
                             {{ __('My Terms') }}
                         </x-nav-link>
 
+                        <x-nav-link :href="route('doctor.terms.calendar')" :active="request()->routeIs('doctor.terms.calendar')">
+                            {{ __('Calendar') }}
+                        </x-nav-link>
+
                         <x-nav-link :href="route('doctor.terms.create')" :active="request()->routeIs('doctor.terms.create')">
                             {{ __('Add Term') }}
                         </x-nav-link>

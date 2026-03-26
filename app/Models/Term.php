@@ -20,6 +20,12 @@ class Term extends Model
         'desc'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'date' => 'date',
+        ];
+    }
 
     public function doctor()
     {

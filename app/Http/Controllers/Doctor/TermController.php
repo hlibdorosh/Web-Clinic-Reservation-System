@@ -8,6 +8,7 @@ use App\Models\Term;
 use App\Notifications\TermCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 
 class TermController extends Controller
@@ -21,6 +22,61 @@ class TermController extends Controller
             ->get();
 
         return view('doctor.terms.index', compact('terms'));
+    }
+
+    public function calendar()
+    {
+        $terms = Term::where('doc_id', auth()->id())
+            ->with(['reservations.patient', 'reservations.service', 'cabinet', 'department'])
+            ->orderBy('date', 'desc')
+            ->orderBy('start_time')
+            ->get();
+
+        // Prepare calendar data
+        $currentDate = Carbon::now();
+        $calendarData = $this->generateCalendarData($terms, $currentDate);
+
+        return view('doctor.terms.calendar', compact('terms', 'calendarData', 'currentDate'));
+    }
+
+    private function generateCalendarData($terms, $currentDate)
+    {
+        $year = $currentDate->year;
+        $month = $currentDate->month;
+
+        $firstDay = Carbon::create($year, $month, 1);
+        $lastDay = $firstDay->copy()->endOfMonth();
+
+        $calendarDays = [];
+        $dayOfWeek = $firstDay->dayOfWeek; // 0 = Sunday, 6 = Saturday
+
+        // Add empty cells for days before month starts
+        for ($i = 0; $i < $dayOfWeek; $i++) {
+            $calendarDays[] = null;
+        }
+
+        // Add days of the month
+        for ($day = 1; $day <= $lastDay->day; $day++) {
+            $date = Carbon::create($year, $month, $day);
+            $dayTerms = $terms->filter(function ($term) use ($date) {
+                $termDate = $term->date instanceof \DateTime ? $term->date : Carbon::parse($term->date);
+                return $termDate->format('Y-m-d') === $date->format('Y-m-d');
+            })->values();
+
+            $calendarDays[] = [
+                'date' => $date,
+                'day' => $day,
+                'terms' => $dayTerms,
+                'hasTerms' => $dayTerms->count() > 0,
+            ];
+        }
+
+        return [
+            'days' => $calendarDays,
+            'month' => $firstDay->format('F Y'),
+            'monthNum' => $month,
+            'year' => $year,
+        ];
     }
 
     public function create()

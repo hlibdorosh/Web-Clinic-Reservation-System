@@ -68,22 +68,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->prefix('doctor')
         ->name('doctor.')
         ->group(function () {
+            Route::get('terms', [\App\Http\Controllers\Doctor\TermController::class, 'index'])
+                ->name('terms.index');
+
+            Route::get('terms/calendar', [\App\Http\Controllers\Doctor\TermController::class, 'calendar'])
+                ->name('terms.calendar');
+
             Route::get('terms/create', [\App\Http\Controllers\Doctor\TermController::class, 'create'])
                 ->name('terms.create');
 
             Route::post('terms', [\App\Http\Controllers\Doctor\TermController::class, 'store'])
                 ->name('terms.store');
 
-            Route::get('terms', [\App\Http\Controllers\Doctor\TermController::class, 'index'])
-                ->name('terms.index');
-            Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update']
-            )
-                ->name('doctor.terms.update');
             Route::get('terms/{term}/edit', [\App\Http\Controllers\Doctor\TermController::class, 'edit'])
                 ->name('terms.edit');
 
             Route::put('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'update'])
-                ->name('terms.update'); // ⚠️ без "doctor." внутри
+                ->name('terms.update');
 
             Route::delete('terms/{term}', [\App\Http\Controllers\Doctor\TermController::class, 'destroy'])
                 ->name('terms.destroy');
