@@ -134,13 +134,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('show');
         });
 
-
-
 });
 
-
-
-
-
+// Clinic Info Page - accessible to all authenticated users
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('about', [\App\Http\Controllers\User\ClinicInfoController::class, 'index'])->name('clinic.about');
+});
 
 require __DIR__.'/auth.php';
+
+
