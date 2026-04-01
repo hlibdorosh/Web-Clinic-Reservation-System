@@ -45,7 +45,6 @@
                     <td>{{ $user->role }}</td>
                     <td class="text-right">
                         <a href="{{ route('admin.users.show', $user) }}" class="btn btn-sm">Open</a>
-
                     </td>
                     <td>
                         <form action="{{ route('admin.users.destroy', $user) }}"
@@ -56,10 +55,7 @@
 
                             <button class="text-red-600 hover:underline">Delete</button>
                         </form>
-
-                    </td>>
-
-
+                    </td>
                 </tr>
 
             @endforeach

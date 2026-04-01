@@ -11,10 +11,27 @@ use App\Notifications\CabinetCreated;
 
 class CabinetController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cabinets = Cabinet::with('department')->paginate(20);
-        return view('admin.cabinets.index', compact('cabinets'));
+        $query = Cabinet::with('department');
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('number', 'like', '%' . $search . '%')
+                  ->orWhere('desc', 'like', '%' . $search . '%');
+        }
+
+        // Department filter
+        if ($request->filled('departments') && count($request->input('departments')) > 0) {
+            $selectedDepartments = $request->input('departments');
+            $query->whereIn('dep_id', $selectedDepartments);
+        }
+
+        $cabinets = $query->paginate(20);
+        $departments = Department::all();
+
+        return view('admin.cabinets.index', compact('cabinets', 'departments'));
     }
 
     public function create()

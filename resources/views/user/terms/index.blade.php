@@ -49,12 +49,12 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <button class="px-4 py-2 bg-black text-white rounded">
+                        <button class="btn btn-primary">
                             Apply
                         </button>
 
                         <a href="{{ route('user.terms.index') }}"
-                           class="px-4 py-2 border rounded">
+                           class="btn">
                             Reset
                         </a>
                     </div>

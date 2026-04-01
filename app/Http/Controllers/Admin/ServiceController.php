@@ -9,10 +9,27 @@ use App\Models\Department;
 
 class ServiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $services = Service::with('department')->paginate(20);
-        return view('admin.services.index', compact('services'));
+        $query = Service::with('department');
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('desc', 'like', '%' . $search . '%');
+        }
+
+        // Department filter
+        if ($request->filled('departments') && count($request->input('departments')) > 0) {
+            $selectedDepartments = $request->input('departments');
+            $query->whereIn('dep_id', $selectedDepartments);
+        }
+
+        $services = $query->paginate(20);
+        $departments = Department::all();
+
+        return view('admin.services.index', compact('services', 'departments'));
     }
 
     public function create()
