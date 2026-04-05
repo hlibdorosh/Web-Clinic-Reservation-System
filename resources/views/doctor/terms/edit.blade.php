@@ -20,7 +20,7 @@
 
             <div class="mb-4">
                 <label>Department</label>
-                <select name="dep_id" class="input w-full" required>
+                <select name="dep_id" id="departmentSelect" class="input w-full" required onchange="filterCabinets()">
                     @foreach($departments as $dep)
                         <option value="{{ $dep->id }}" @selected($term->dep_id == $dep->id)>
                             {{ $dep->name }}
@@ -31,12 +31,8 @@
 
             <div class="mb-4">
                 <label>Cabinet</label>
-                <select name="cab_id" class="input w-full" required>
-                    @foreach($cabinets as $cab)
-                        <option value="{{ $cab->id }}" @selected($term->cab_id == $cab->id)>
-                            {{ $cab->number }}
-                        </option>
-                    @endforeach
+                <select name="cab_id" id="cabinetSelect" class="input w-full" required>
+                    <option value="">Select Cabinet</option>
                 </select>
             </div>
 
@@ -59,6 +55,43 @@
         </form>
 
         <script>
+            // Store cabinets grouped by department
+            const cabinetsByDepartment = {!! json_encode(
+                $departments->mapWithKeys(function($dep) {
+                    return [$dep->id => $dep->cabinets->map(function($cab) {
+                        return ['id' => $cab->id, 'number' => $cab->number];
+                    })];
+                })
+            ) !!};
+
+            const currentCabinetId = {{ $term->cab_id }};
+
+            function filterCabinets() {
+                const departmentId = document.getElementById('departmentSelect').value;
+                const cabinetSelect = document.getElementById('cabinetSelect');
+
+                // Clear existing options
+                cabinetSelect.innerHTML = '<option value="">Select Cabinet</option>';
+
+                // Add cabinets for selected department
+                if (departmentId && cabinetsByDepartment[departmentId]) {
+                    cabinetsByDepartment[departmentId].forEach(cabinet => {
+                        const option = document.createElement('option');
+                        option.value = cabinet.id;
+                        option.textContent = cabinet.number;
+                        if (cabinet.id === currentCabinetId) {
+                            option.selected = true;
+                        }
+                        cabinetSelect.appendChild(option);
+                    });
+                }
+            }
+
+            // Initialize cabinet list on page load
+            window.addEventListener('DOMContentLoaded', function() {
+                filterCabinets();
+            });
+
             function formatTimeFields(event) {
                 const startTimeInput = document.querySelector('input[name="start_time"]');
                 const endTimeInput = document.querySelector('input[name="end_time"]');
