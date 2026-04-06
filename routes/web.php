@@ -141,6 +141,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('about', [\App\Http\Controllers\User\ClinicInfoController::class, 'index'])->name('clinic.about');
 });
 
+// Google Calendar Authentication Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('auth/google/redirect', [\App\Http\Controllers\Auth\GoogleCalendarAuthController::class, 'redirect'])
+        ->name('google.calendar.redirect');
+    Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleCalendarAuthController::class, 'callback'])
+        ->name('google.calendar.callback');
+    Route::post('auth/google/disconnect', [\App\Http\Controllers\Auth\GoogleCalendarAuthController::class, 'disconnect'])
+        ->name('google.calendar.disconnect');
+});
+
 require __DIR__.'/auth.php';
 
 

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'google' => [
+        'calendar_client_id' => env('GOOGLE_CALENDAR_CLIENT_ID'),
+        'calendar_client_secret' => env('GOOGLE_CALENDAR_CLIENT_SECRET'),
+        'calendar_redirect_uri' => env('GOOGLE_CALENDAR_REDIRECT_URI', 'http://localhost:8000/auth/google/callback'),
+    ],
+
 ];

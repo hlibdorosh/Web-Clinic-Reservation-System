@@ -24,6 +24,9 @@ class User extends Authenticatable
         'role',
         'bio',
         'photo',
+        'google_calendar_token',
+        'google_calendar_refresh_token',
+        'google_calendar_token_expires_at',
     ];
 
     /**
@@ -34,6 +37,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'google_calendar_token',
+        'google_calendar_refresh_token',
     ];
 
     /**

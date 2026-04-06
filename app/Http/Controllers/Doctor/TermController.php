@@ -107,9 +107,9 @@ class TermController extends Controller
             'desc' => 'nullable',
         ]);
 
-        // Убедиться, что время в формате H:i без секунд
-        $start_time = substr($request->start_time, 0, 5);
-        $end_time = substr($request->end_time, 0, 5);
+        // Ensure time format is H:i with proper padding
+        $start_time = $this->normalizeTimeFormat($request->start_time);
+        $end_time = $this->normalizeTimeFormat($request->end_time);
 
         // Проверка конфликта термина, исключая сам себя
         $conflict = Term::where('id', '!=', $term->id)
@@ -160,9 +160,9 @@ class TermController extends Controller
 
         $doctorId = auth()->id();
 
-        // Убедиться, что время в формате H:i без секунд
-        $start_time = substr($request->start_time, 0, 5);
-        $end_time = substr($request->end_time, 0, 5);
+        // Ensure time format is H:i with proper padding
+        $start_time = $this->normalizeTimeFormat($request->start_time);
+        $end_time = $this->normalizeTimeFormat($request->end_time);
 
         // Проверяем конфликт времени: тот же врач или тот же кабинет
         $conflict = Term::where('date', $request->date)
@@ -226,4 +226,31 @@ class TermController extends Controller
         return redirect()->route('doctor.terms.index')
             ->with('success', 'Term deleted successfully');
     }
+
+    /**
+     * Normalize time format to ensure it's always HH:mm
+     * Handles cases like "9:30" -> "09:30", "00:0" -> "00:00", and "15:00:00" -> "15:00"
+     */
+    private function normalizeTimeFormat($time)
+    {
+        if (empty($time)) {
+            return '00:00';
+        }
+
+        // Remove seconds if present (HH:mm:ss -> HH:mm)
+        $time = substr($time, 0, 5);
+
+        // Split and pad
+        $parts = explode(':', $time);
+        if (count($parts) !== 2) {
+            return '00:00';
+        }
+
+        $hours = str_pad($parts[0], 2, '0', STR_PAD_LEFT);
+        $minutes = str_pad($parts[1], 2, '0', STR_PAD_LEFT);
+
+        return $hours . ':' . $minutes;
+    }
 }
+
+
