@@ -28,12 +28,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy PHP dependencies
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-# Copy application
+# Copy application (artisan required for composer post-autoload scripts)
 COPY . .
+
+# Install PHP dependencies
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Copy built frontend assets from Stage 1
 COPY --from=frontend /app/public/build public/build
