@@ -31,15 +31,16 @@ WORKDIR /var/www/html
 # Copy application (artisan required for composer post-autoload scripts)
 COPY . .
 
+# Create storage and bootstrap directories before composer install
+RUN mkdir -p storage/logs storage/framework/{sessions,views,cache} bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
 # Install PHP dependencies
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Copy built frontend assets from Stage 1
 COPY --from=frontend /app/public/build public/build
 
-# Create storage directories
-RUN mkdir -p storage/logs storage/framework/{sessions,views,cache} bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
 
 # Copy startup script
 COPY start.sh /usr/local/bin/
