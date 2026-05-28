@@ -3,6 +3,15 @@ set -e
 
 PORT=${PORT:-10000}
 
+# Ensure storage and bootstrap directories exist and are writable at runtime
+mkdir -p storage/logs \
+         storage/framework/sessions \
+         storage/framework/views \
+         storage/framework/cache/data \
+         bootstrap/cache
+
+chmod -R 775 storage bootstrap/cache
+
 # Clear caches
 php artisan config:clear
 php artisan route:clear
