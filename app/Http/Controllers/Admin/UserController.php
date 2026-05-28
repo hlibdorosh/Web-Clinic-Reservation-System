@@ -37,10 +37,13 @@ class UserController extends Controller
     // PROFILE PAGE
     public function show(User $user)
     {
-        $terms = $user->terms()->with(['doctor', 'cabinet', 'department'])->get();
-
-
-        return view('admin.users.show', compact('user', 'terms'));
+        if ($user->role === 'doctor') {
+            $terms = $user->terms()->with(['doctor', 'cabinet', 'department'])->get();
+            return view('admin.users.show', compact('user', 'terms'));
+        } else {
+            $reservations = $user->reservations()->with(['term.doctor', 'term.department', 'term.cabinet', 'service'])->get();
+            return view('admin.users.show', compact('user', 'reservations'));
+        }
     }
 
     // DELETE A TERM
