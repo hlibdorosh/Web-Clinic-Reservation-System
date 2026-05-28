@@ -171,6 +171,44 @@
                     {{ __('About Us') }}
                 </x-responsive-nav-link>
             @endif
+
+            {{-- DOCTOR --}}
+            @if(auth()->check() && auth()->user()->role === 'doctor')
+                <x-responsive-nav-link :href="route('doctor.terms.index')" :active="request()->routeIs('doctor.terms.index')">
+                    {{ __('My Terms') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('doctor.terms.calendar')" :active="request()->routeIs('doctor.terms.calendar')">
+                    {{ __('Calendar') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('doctor.terms.create')" :active="request()->routeIs('doctor.terms.create')">
+                    {{ __('Add Term') }}
+                </x-responsive-nav-link>
+            @endif
+
+            {{-- ADMIN --}}
+            @if(Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.users.index')"
+                                       :active="request()->routeIs('admin.users.*')">
+                    {{ __('Users') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.departments.index')"
+                                       :active="request()->routeIs('admin.departments.*')">
+                    {{ __('Departments') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.cabinets.index')"
+                                       :active="request()->routeIs('admin.cabinets.*')">
+                    {{ __('Cabinets') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.services.index')"
+                                       :active="request()->routeIs('admin.services.*')">
+                    {{ __('Services') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

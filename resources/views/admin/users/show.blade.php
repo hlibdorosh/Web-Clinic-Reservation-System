@@ -98,46 +98,93 @@
             @endif
         </div>
 
-        {{-- TERMS --}}
-        <h2 class="text-xl mb-2">Terms</h2>
+        {{-- TERMS (FOR DOCTORS) --}}
+        @if($user->role === 'doctor')
+            <h2 class="text-xl mb-2">Terms</h2>
 
-        @if($terms->isEmpty())
-            <p>No terms</p>
-        @else
-            <table class="table w-full">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Service</th>
-                    <th>Doctor</th>
-                    <th>Cabinet</th>
-                    <th></th>
-                </tr>
-                </thead>
-
-                <tbody>
-                @foreach($terms as $term)
+            @if($terms->isEmpty())
+                <p>No terms</p>
+            @else
+                <table class="table w-full">
+                    <thead>
                     <tr>
-                        <td>{{ $term->date }}</td>
-                        <td>{{ $term->service?->name }}</td>
-                        <td>{{ $term->doctor?->name }}</td>
-                        <td>{{ $term->cabinet?->number }}</td>
-
-                        <td class="text-right">
-                            <form method="POST"
-                                  action="{{ route('admin.users.term.delete', $term) }}"
-                                  onsubmit="return confirm('Delete this term?');">
-
-                                @csrf
-                                @method('DELETE')
-
-                                <button class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
+                        <th>Date</th>
+                        <th>Service</th>
+                        <th>Cabinet</th>
+                        <th>Department</th>
+                        <th></th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                    @foreach($terms as $term)
+                        <tr>
+                            <td>{{ $term->date }}</td>
+                            <td>{{ $term->service?->name }}</td>
+                            <td>{{ $term->cabinet?->number }}</td>
+                            <td>{{ $term->department?->name }}</td>
+
+                            <td class="text-right">
+                                <form method="POST"
+                                      action="{{ route('admin.users.term.delete', $term) }}"
+                                      onsubmit="return confirm('Delete this term?');">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            @endif
+
+        {{-- RESERVATIONS (FOR PATIENTS) --}}
+        @else
+            <h2 class="text-xl mb-2">Reservations</h2>
+
+            @if($reservations->isEmpty())
+                <p>No reservations</p>
+            @else
+                <table class="table w-full">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Service</th>
+                        <th>Doctor</th>
+                        <th>Cabinet</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @foreach($reservations as $reservation)
+                        <tr>
+                            <td>{{ $reservation->term?->date }}</td>
+                            <td>{{ $reservation->service?->name }}</td>
+                            <td>{{ $reservation->term?->doctor?->name }}</td>
+                            <td>{{ $reservation->term?->cabinet?->number }}</td>
+                            <td>{{ ucfirst($reservation->state) }}</td>
+
+                            <td class="text-right">
+                                <form method="POST"
+                                      action="{{ route('admin.users.term.delete', $reservation->term) }}"
+                                      onsubmit="return confirm('Delete this reservation?');">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            @endif
         @endif
 
     </div>
