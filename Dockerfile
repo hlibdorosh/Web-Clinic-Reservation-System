@@ -17,14 +17,17 @@ RUN npm run build
 # Stage 2: Final PHP application image
 FROM php:8.2-cli
 
-# Install essential system dependencies
+# Install system dependencies and PHP PostgreSQL extension
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
+    libpq-dev \
+    && docker-php-ext-install pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 
 WORKDIR /var/www/html
 
