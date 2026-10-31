@@ -27,14 +27,14 @@
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-ocean-300 text-ocean-600 shadow-sm focus:ring-ocean-400" name="remember">
-                <span class="ms-2 text-sm text-ocean-700">{{ __('Remember me') }}</span>
+                <input id="remember_me" type="checkbox" class="rounded border-line-strong text-ocean-700 focus:ring-ocean-500" name="remember">
+                <span class="ms-2 text-sm text-ink-600">{{ __('Remember me') }}</span>
             </label>
         </div>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-ocean-600 hover:text-ocean-800 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ocean-400" href="{{ route('password.request') }}">
+                <a class="text-sm text-ocean-700 hover:underline rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ocean-500" href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
@@ -46,11 +46,11 @@
     </form>
 
     <!-- Register Link -->
-    <div class="mt-6 text-center border-t border-gray-300 pt-6">
-        <p class="text-sm text-gray-600">
+    <div class="mt-6 text-center border-t border-line pt-6">
+        <p class="text-sm text-ink-600">
             {{ __('Don\'t have an account?') }}
-            <a href="{{ route('register') }}" class="font-semibold text-ocean-600 hover:text-ocean-800 underline">
-                {{ __('Register here') }}
+            <a href="{{ route('register') }}" class="font-medium text-ocean-700 hover:underline">
+                {{ __('Register') }}
             </a>
         </p>
     </div>

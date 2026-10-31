@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="p-6 max-w-xl mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"><div class="card p-6 max-w-xl">
 
-        <h1 class="text-2xl mb-4">Edit Term</h1>
+        <h1 class="page-title mb-6">Edit term</h1>
 
         @if ($errors->any())
-            <div class="p-4 bg-red-100 text-red-700 mb-4 rounded">
+            <div class="alert-error mb-4">
                 {{ $errors->first() }}
             </div>
         @endif
@@ -14,12 +14,12 @@
             @method('PUT')
 
             <div class="mb-4">
-                <label>Date</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Date</label>
                 <input type="date" name="date" value="{{ $term->date }}" class="input w-full" required>
             </div>
 
             <div class="mb-4">
-                <label>Department</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Department</label>
                 <select name="dep_id" id="departmentSelect" class="input w-full" required onchange="filterCabinets()">
                     @foreach($departments as $dep)
                         <option value="{{ $dep->id }}" @selected($term->dep_id == $dep->id)>
@@ -30,28 +30,28 @@
             </div>
 
             <div class="mb-4">
-                <label>Cabinet</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Cabinet</label>
                 <select name="cab_id" id="cabinetSelect" class="input w-full" required>
-                    <option value="">Select Cabinet</option>
+                    <option value="">Select cabinet</option>
                 </select>
             </div>
 
             <div class="mb-4">
-                <label>Start time</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Start time</label>
                 <input type="time" name="start_time" value="{{ substr($term->start_time, 0, 5) }}" class="input w-full" step="60" required>
             </div>
 
             <div class="mb-4">
-                <label>End time</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">End time</label>
                 <input type="time" name="end_time" value="{{ substr($term->end_time, 0, 5) }}" class="input w-full" step="60" required>
             </div>
 
             <div class="mb-4">
-                <label>Description</label>
-                <textarea name="desc" class="input w-full">{{ $term->desc }}</textarea>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Description</label>
+                <textarea name="desc" rows="4" class="input h-auto w-full py-2">{{ $term->desc }}</textarea>
             </div>
 
-            <button class="btn btn-primary w-full">Update term</button>
+            <button class="btn w-full">Update term</button>
         </form>
 
         <script>
@@ -71,7 +71,7 @@
                 const cabinetSelect = document.getElementById('cabinetSelect');
 
                 // Clear existing options
-                cabinetSelect.innerHTML = '<option value="">Select Cabinet</option>';
+                cabinetSelect.innerHTML = '<option value="">Select cabinet</option>';
 
                 // Add cabinets for selected department
                 if (departmentId && cabinetsByDepartment[departmentId]) {
@@ -104,5 +104,5 @@
                 }
             }
         </script>
-    </div>
+    </div></div>
 </x-app-layout>

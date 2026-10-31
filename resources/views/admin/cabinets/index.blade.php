@@ -1,64 +1,63 @@
 <x-app-layout>
-    <div class="p-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex justify-between items-center mb-6">
-            <a href="{{ route('admin.cabinets.create') }}" class="btn">Add Cabinet</a>
+            <h1 class="page-title">Cabinets</h1>
+            <a href="{{ route('admin.cabinets.create') }}" class="btn">Add cabinet</a>
         </div>
 
-        <!-- Filter Section -->
-        <div class="bg-white rounded-lg shadow p-4 mb-6">
+        <!-- Filter section -->
+        <div class="card p-5 mb-6">
             <form method="GET" action="{{ route('admin.cabinets.index') }}" class="flex flex-wrap gap-4 items-end">
-                <!-- Search Bar -->
+                <!-- Search -->
                 <div class="flex-1 min-w-64">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Cabinets</label>
+                    <label class="block text-sm font-medium text-ink-900 mb-1">Search</label>
                     <input
                         type="text"
                         name="search"
-                        placeholder="Search by number or description..."
+                        placeholder="Number or description"
                         value="{{ request('search') }}"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500"
+                        class="input"
                     >
                 </div>
 
-                <!-- Department Filter Dropdown -->
-                <div class="relative group">
+                <!-- Department filter dropdown -->
+                <div class="relative">
                     <button
                         type="button"
-                        class="btn flex items-center gap-2"
+                        class="btn-outline flex items-center gap-2"
                         id="dept-dropdown-btn"
                     >
                         Departments
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
+                        <svg class="w-4 h-4 text-ink-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
-                    <!-- Dropdown Menu -->
+                    <!-- Dropdown menu -->
                     <div
                         id="dept-dropdown-menu"
-                        class="absolute left-0 mt-2 w-64 bg-white border border-gray-300 rounded-md shadow-lg z-10 hidden"
+                        class="absolute left-0 mt-2 w-64 bg-white border border-line-strong rounded-xl z-10 hidden"
                     >
                         <div class="p-4">
                             <div class="flex justify-between items-center mb-3">
-                                <h3 class="font-semibold text-gray-700">Filter by Department</h3>
+                                <h3 class="text-sm font-medium text-ink-900">Filter by department</h3>
                                 <button
                                     type="button"
-                                    class="text-sm text-blue-500 hover:text-blue-700"
+                                    class="text-sm text-ocean-700 hover:underline"
                                     id="clear-depts"
                                 >
-                                    Clear All
+                                    Clear all
                                 </button>
                             </div>
-                            <div class="space-y-2">
+                            <div class="space-y-1">
                                 @foreach($departments as $dept)
-                                    <label class="flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer">
+                                    <label class="flex items-center gap-3 px-2 py-2 hover:bg-ink-50 rounded-lg cursor-pointer">
                                         <input
                                             type="checkbox"
                                             name="departments[]"
                                             value="{{ $dept->id }}"
                                             @if(is_array(request('departments')) && in_array($dept->id, request('departments'))) checked @endif
-                                            class="w-4 h-4 text-blue-500 rounded focus:ring-2 focus:ring-blue-500 dept-checkbox"
+                                            class="w-4 h-4 text-ocean-700 rounded focus:ring-2 focus:ring-ocean-600 dept-checkbox"
                                         >
-                                        <span class="ml-3 text-gray-700">{{ $dept->name }}</span>
+                                        <span class="text-sm text-ink-600">{{ $dept->name }}</span>
                                     </label>
                                 @endforeach
                             </div>
@@ -68,53 +67,55 @@
 
                 <!-- Buttons -->
                 <div class="flex gap-2">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn">
                         Filter
                     </button>
-                    <a href="{{ route('admin.cabinets.index') }}" class="btn">
+                    <a href="{{ route('admin.cabinets.index') }}" class="btn-outline">
                         Reset
                     </a>
                 </div>
             </form>
         </div>
 
-        <table class="table w-full mt-4">
-            <thead>
-            <tr>
-                <th>Number</th>
-                <th>Description</th>
-                <th>Department</th>
-                <th class="text-right"></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            @forelse($cabinets as $cabinet)
+        <div class="card overflow-hidden">
+            <table class="table w-full">
+                <thead>
                 <tr>
-                    <td>{{ $cabinet->number }}</td>
-                    <td>{{ $cabinet->desc }}</td>
-                    <td>{{ $cabinet->department?->name }}</td>
-                    <td class="text-right">
-                        <a href="{{ route('admin.cabinets.edit', $cabinet) }}" class="btn btn-sm">Edit</a>
-
-                        <form action="{{ route('admin.cabinets.destroy', $cabinet) }}"
-                              method="POST" class="inline-block"
-                              onsubmit="return confirm('Delete?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-danger">X</button>
-                        </form>
-                    </td>
+                    <th class="text-left">Number</th>
+                    <th class="text-left">Description</th>
+                    <th class="text-left">Department</th>
+                    <th class="text-right"></th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center py-4 text-gray-500">No cabinets found</td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
+                </thead>
 
-        {{ $cabinets->links() }}
+                <tbody>
+                @forelse($cabinets as $item)
+                    <tr>
+                        <td class="text-ink-900 tabular-nums">{{ $item->number }}</td>
+                        <td class="text-ink-600">{{ $item->desc }}</td>
+                        <td class="text-ink-600">{{ $item->department?->name }}</td>
+                        <td class="text-right whitespace-nowrap">
+                            <a href="{{ route('admin.cabinets.edit', $item) }}" class="btn-outline btn-sm">Edit</a>
+
+                            <form action="{{ route('admin.cabinets.destroy', $item) }}"
+                                  method="POST" class="inline-block"
+                                  onsubmit="return confirm('Delete?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn-outline btn-sm text-red-600">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center py-6 text-ink-500">No cabinets found</td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">{{ $cabinets->links() }}</div>
     </div>
 
     <script>
@@ -122,6 +123,7 @@
         const dropdownBtn = document.getElementById('dept-dropdown-btn');
         const dropdownMenu = document.getElementById('dept-dropdown-menu');
         const clearBtn = document.getElementById('clear-depts');
+        const chevron = '<svg class="w-4 h-4 text-ink-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>';
 
         // Toggle dropdown
         dropdownBtn.addEventListener('click', function(e) {
@@ -149,9 +151,9 @@
             const checkedCount = document.querySelectorAll('.dept-checkbox:checked').length;
 
             if (checkedCount > 0) {
-                dropdownBtn.innerHTML = `Departments (${checkedCount}) <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>`;
+                dropdownBtn.innerHTML = `Departments (${checkedCount}) ${chevron}`;
             } else {
-                dropdownBtn.innerHTML = `Departments <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>`;
+                dropdownBtn.innerHTML = `Departments ${chevron}`;
             }
         }
 
