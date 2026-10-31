@@ -26,9 +26,9 @@ $width = match ($width) {
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             class="absolute z-50 mt-2 {{ $width }} rounded-xl {{ $alignmentClasses }}"
-            style="display: none; box-shadow: 0 8px 32px -4px rgba(5,130,163,0.20), 0 2px 8px -2px rgba(5,130,163,0.12);"
+            style="display: none;"
             @click="open = false">
-        <div class="rounded-xl ring-1 ring-ocean-200 overflow-hidden {{ $contentClasses }}">
+        <div class="rounded-xl border border-line overflow-hidden {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>

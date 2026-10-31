@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="p-6 max-w-xl mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"><div class="card p-6 max-w-xl">
 
-        <h1 class="text-2xl mb-4">Create New Term</h1>
+        <h1 class="page-title mb-6">Create new term</h1>
 
         @if ($errors->any())
-            <div class="p-4 bg-red-100 text-red-700 mb-4 rounded">
+            <div class="alert-error mb-4">
                 {{ $errors->first() }}
             </div>
         @endif
@@ -13,9 +13,9 @@
             @csrf
 
             <div class="mb-4">
-                <label>Department</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Department</label>
                 <select name="dep_id" id="departmentSelect" class="input w-full" required onchange="filterCabinets()">
-                    <option value="">Select Department</option>
+                    <option value="">Select department</option>
                     @foreach($departments as $dep)
                         <option value="{{ $dep->id }}">{{ $dep->name }}</option>
                     @endforeach
@@ -24,34 +24,34 @@
 
 
             <div class="mb-4">
-                <label>Cabinet</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Cabinet</label>
                 <select name="cab_id" id="cabinetSelect" class="input w-full" required>
-                    <option value="">Select Cabinet</option>
+                    <option value="">Select cabinet</option>
                 </select>
             </div>
 
             <div class="mb-4">
-                <label>Date</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Date</label>
                 <input type="date" name="date" class="input w-full" required>
             </div>
 
 
             <div class="mb-4">
-                <label>Start time</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Start time</label>
                 <input type="time" name="start_time" class="input w-full" step="60" required>
             </div>
 
             <div class="mb-4">
-                <label>End time</label>
+                <label class="block text-sm font-medium text-ink-900 mb-1">End time</label>
                 <input type="time" name="end_time" class="input w-full" step="60" required>
             </div>
 
             <div class="mb-4">
-                <label>Description (optional)</label>
-                <textarea name="desc" class="input w-full"></textarea>
+                <label class="block text-sm font-medium text-ink-900 mb-1">Description (optional)</label>
+                <textarea name="desc" rows="4" class="input h-auto w-full py-2"></textarea>
             </div>
 
-            <button class="btn btn-primary w-full">Create term</button>
+            <button class="btn w-full">Create term</button>
         </form>
 
         <script>
@@ -69,7 +69,7 @@
                 const cabinetSelect = document.getElementById('cabinetSelect');
 
                 // Clear existing options
-                cabinetSelect.innerHTML = '<option value="">Select Cabinet</option>';
+                cabinetSelect.innerHTML = '<option value="">Select cabinet</option>';
 
                 // Add cabinets for selected department
                 if (departmentId && cabinetsByDepartment[departmentId]) {
@@ -94,5 +94,5 @@
                 }
             }
         </script>
-    </div>
+    </div></div>
 </x-app-layout>

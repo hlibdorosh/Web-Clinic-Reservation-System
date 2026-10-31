@@ -1,14 +1,16 @@
 <x-app-layout>
-    <div class="p-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <h1 class="text-2xl mb-4">User Profile</h1>
+        <h1 class="page-title mb-6">User profile</h1>
 
         {{-- PERSONAL INFO --}}
-        <div class="mb-6 p-4 border rounded-lg">
-            <h2 class="text-xl mb-2">Personal Information</h2>
-            <p><strong>Name:</strong> {{ $user->name }}</p>
-            <p><strong>Email:</strong> {{ $user->email }}</p>
-            <p><strong>Role:</strong> {{ ucfirst($user->role) }}</p>
+        <div class="card p-6 mb-8 max-w-xl">
+            <h2 class="text-lg font-medium text-ink-900 mb-3">Personal information</h2>
+            <div class="space-y-1 text-sm">
+                <p><span class="text-ink-500">Name</span> <span class="text-ink-900">{{ $user->name }}</span></p>
+                <p><span class="text-ink-500">Email</span> <span class="text-ink-900">{{ $user->email }}</span></p>
+                <p><span class="text-ink-500">Role</span> <span class="text-ink-900">{{ ucfirst($user->role) }}</span></p>
+            </div>
 
             {{-- ROLE CHANGE CHECKBOX --}}
             @if($user->role === 'patient')
@@ -17,12 +19,12 @@
                     $canChangeRole = !$hasReservations;
                 @endphp
 
-                <div class="mt-4 p-3 border rounded bg-gray-50">
+                <div class="mt-4 p-4 border border-line rounded-lg bg-ink-50">
                     <form id="promoteForm" method="POST" action="{{ route('admin.users.updateRole', $user) }}" class="inline">
                         @csrf
                         @method('PATCH')
 
-                        <label class="flex items-center cursor-pointer {{ $canChangeRole ? '' : 'opacity-50 cursor-not-allowed' }}">
+                        <label class="flex items-center gap-2 text-sm cursor-pointer {{ $canChangeRole ? '' : 'opacity-50 cursor-not-allowed' }}">
                             <input type="checkbox"
                                    id="promoteCheckbox"
                                    name="promote_to_doctor"
@@ -30,38 +32,38 @@
                                    onchange="showPromoteModal()"
                                    {{ $canChangeRole ? '' : 'disabled' }}
                                    class="form-checkbox">
-                            <span class="ml-2 font-medium">
-                                Promote to Doctor
+                            <span class="font-medium text-ink-900">
+                                Promote to doctor
                             </span>
                         </label>
                         @if(!$canChangeRole)
                             <p class="text-sm text-red-600 mt-2">
-                                ⚠️ Cannot promote user with active reservations
+                                Cannot promote user with active reservations
                             </p>
                         @endif
                     </form>
                 </div>
 
-                <!-- Confirmation Modal -->
-                <div id="promoteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                    <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-auto">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Confirm Promotion</h3>
-                        <p class="text-gray-600 mb-6">
-                            Are you sure you want to promote <strong>{{ $user->name }}</strong> to Doctor?
+                <!-- Confirmation modal -->
+                <div id="promoteModal" class="fixed inset-0 bg-ink-900/40 hidden flex items-center justify-center z-50">
+                    <div class="bg-white rounded-xl border border-line p-6 max-w-sm mx-auto">
+                        <h3 class="text-lg font-medium text-ink-900 mb-2">Confirm promotion</h3>
+                        <p class="text-sm text-ink-600 mb-3">
+                            Are you sure you want to promote <strong class="font-medium">{{ $user->name }}</strong> to Doctor?
                         </p>
-                        <p class="text-sm text-gray-500 mb-6">
+                        <p class="text-sm text-ink-500 mb-6">
                             This action will give them access to create terms and manage appointments.
                         </p>
 
                         <div class="flex gap-3 justify-end">
                             <button type="button"
                                     onclick="cancelPromote()"
-                                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 font-medium">
+                                    class="btn-outline">
                                 Cancel
                             </button>
                             <button type="button"
                                     onclick="confirmPromote()"
-                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">
+                                    class="btn">
                                 Promote
                             </button>
                         </div>
@@ -84,14 +86,14 @@
                     }
                 </script>
             @elseif($user->role === 'doctor')
-                <div class="mt-4 p-3 border rounded bg-blue-50">
-                    <label class="flex items-center opacity-50 cursor-not-allowed">
+                <div class="mt-4 p-4 border border-line rounded-lg bg-ink-50">
+                    <label class="flex items-center gap-2 text-sm opacity-50 cursor-not-allowed">
                         <input type="checkbox"
                                checked
                                disabled
                                class="form-checkbox">
-                        <span class="ml-2 font-medium">
-                            Doctor Role
+                        <span class="font-medium text-ink-900">
+                            Doctor role
                         </span>
                     </label>
                 </div>
@@ -100,90 +102,107 @@
 
         {{-- TERMS (FOR DOCTORS) --}}
         @if($user->role === 'doctor')
-            <h2 class="text-xl mb-2">Terms</h2>
+            <h2 class="text-lg font-medium text-ink-900 mb-3">Terms</h2>
 
             @if($terms->isEmpty())
-                <p>No terms</p>
+                <p class="text-sm text-ink-500">No terms</p>
             @else
-                <table class="table w-full">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Service</th>
-                        <th>Cabinet</th>
-                        <th>Department</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    @foreach($terms as $term)
+                <div class="card overflow-hidden">
+                    <table class="table w-full">
+                        <thead>
                         <tr>
-                            <td>{{ $term->date }}</td>
-                            <td>{{ $term->service?->name }}</td>
-                            <td>{{ $term->cabinet?->number }}</td>
-                            <td>{{ $term->department?->name }}</td>
-
-                            <td class="text-right">
-                                <form method="POST"
-                                      action="{{ route('admin.users.term.delete', $term) }}"
-                                      onsubmit="return confirm('Delete this term?');">
-
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </form>
-                            </td>
+                            <th class="text-left">Date</th>
+                            <th class="text-left">Service</th>
+                            <th class="text-left">Cabinet</th>
+                            <th class="text-left">Department</th>
+                            <th></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody>
+                        @foreach($terms as $term)
+                            <tr>
+                                <td class="text-ink-900 tabular-nums">{{ $term->date }}</td>
+                                <td class="text-ink-600">{{ $term->service?->name }}</td>
+                                <td class="text-ink-600 tabular-nums">{{ $term->cabinet?->number }}</td>
+                                <td class="text-ink-600">{{ $term->department?->name }}</td>
+
+                                <td class="text-right">
+                                    <form method="POST"
+                                          action="{{ route('admin.users.term.delete', $term) }}"
+                                          onsubmit="return confirm('Delete this term?');">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button class="btn-outline btn-sm text-red-600">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @endif
 
         {{-- RESERVATIONS (FOR PATIENTS) --}}
         @else
-            <h2 class="text-xl mb-2">Reservations</h2>
+            <h2 class="text-lg font-medium text-ink-900 mb-3">Reservations</h2>
 
             @if($reservations->isEmpty())
-                <p>No reservations</p>
+                <p class="text-sm text-ink-500">No reservations</p>
             @else
-                <table class="table w-full">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Service</th>
-                        <th>Doctor</th>
-                        <th>Cabinet</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    @foreach($reservations as $reservation)
+                <div class="card overflow-hidden">
+                    <table class="table w-full">
+                        <thead>
                         <tr>
-                            <td>{{ $reservation->term?->date }}</td>
-                            <td>{{ $reservation->service?->name }}</td>
-                            <td>{{ $reservation->term?->doctor?->name }}</td>
-                            <td>{{ $reservation->term?->cabinet?->number }}</td>
-                            <td>{{ ucfirst($reservation->state) }}</td>
-
-                            <td class="text-right">
-                                <form method="POST"
-                                      action="{{ route('admin.users.term.delete', $reservation->term) }}"
-                                      onsubmit="return confirm('Delete this reservation?');">
-
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </form>
-                            </td>
+                            <th class="text-left">Date</th>
+                            <th class="text-left">Service</th>
+                            <th class="text-left">Doctor</th>
+                            <th class="text-left">Cabinet</th>
+                            <th class="text-left">Status</th>
+                            <th></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody>
+                        @foreach($reservations as $reservation)
+                            @php
+                                $dot = match($reservation->state) {
+                                    'confirmed' => 'bg-emerald-600',
+                                    'cancelled', 'canceled' => 'bg-red-600',
+                                    'pending' => 'bg-amber-600',
+                                    default => 'bg-ink-400',
+                                };
+                            @endphp
+                            <tr>
+                                <td class="text-ink-900 tabular-nums">{{ $reservation->term?->date }}</td>
+                                <td class="text-ink-600">{{ $reservation->service?->name }}</td>
+                                <td class="text-ink-600">{{ $reservation->term?->doctor?->name }}</td>
+                                <td class="text-ink-600 tabular-nums">{{ $reservation->term?->cabinet?->number }}</td>
+                                <td class="text-ink-600">
+                                    <span class="inline-flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $dot }}"></span>
+                                        {{ ucfirst($reservation->state) }}
+                                    </span>
+                                </td>
+
+                                <td class="text-right">
+                                    <form method="POST"
+                                          action="{{ route('admin.users.term.delete', $reservation->term) }}"
+                                          onsubmit="return confirm('Delete this reservation?');">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button class="btn-outline btn-sm text-red-600">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
             @endif
         @endif
 

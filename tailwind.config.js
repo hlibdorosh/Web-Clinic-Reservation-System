@@ -15,6 +15,7 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                // Brand accent, from the clinic's existing ocean palette
                 ocean: {
                     50:  '#f0fdff',
                     100: '#ccf7fe',
@@ -28,12 +29,21 @@ export default {
                     900: '#124659',
                     950: '#072d3d',
                 },
+                // Cool ink neutrals for every surface and every text role
+                ink: {
+                    50:  '#f5f7fa',
+                    100: '#eceff4',
+                    200: '#dfe4ec',
+                    400: '#9aa3b2',
+                    500: '#6b7487',
+                    600: '#4b5565',
+                    900: '#111827',
+                },
             },
-            boxShadow: {
-                'ocean-sm': '0 2px 10px -1px rgba(5,130,163,0.12), 0 1px 4px -1px rgba(5,130,163,0.08)',
-                'ocean':    '0 4px 20px -2px rgba(5,130,163,0.16), 0 2px 8px -2px rgba(5,130,163,0.10)',
-                'ocean-lg': '0 8px 40px -4px rgba(5,130,163,0.22), 0 4px 16px -4px rgba(5,130,163,0.14)',
-                'ocean-xl': '0 16px 60px -8px rgba(5,130,163,0.28), 0 8px 24px -6px rgba(5,130,163,0.18)',
+            borderColor: {
+                // Hairlines: ink at low opacity
+                line: 'rgba(17, 24, 39, 0.08)',
+                'line-strong': 'rgba(17, 24, 39, 0.14)',
             },
         },
     },
