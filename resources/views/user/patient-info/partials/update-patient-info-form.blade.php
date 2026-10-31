@@ -41,6 +41,20 @@
             <x-input-error :messages="$errors->get('sex')" class="mt-2" />
         </div>
 
+        @if ($patientInfo->health_data_consent_at === null)
+            <div>
+                <div class="flex items-start gap-3">
+                    <input id="health_data_consent" name="health_data_consent" type="checkbox" value="1" required
+                           @checked(old('health_data_consent'))
+                           class="mt-0.5 h-4 w-4 rounded border-line-strong text-ocean-700 focus:ring-ocean-500">
+                    <label for="health_data_consent" class="text-sm text-ink-600 leading-5">
+                        I agree that the clinic may process this health information to manage my visits and care, as described in the <a href="{{ route('legal.privacy') }}#health" class="text-ocean-700 underline hover:no-underline">Privacy policy</a>. You can withdraw consent by deleting your account.
+                    </label>
+                </div>
+                <x-input-error :messages="$errors->get('health_data_consent')" class="mt-2" />
+            </div>
+        @endif
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

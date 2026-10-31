@@ -5,7 +5,7 @@
             <div>
                 <h3 class="text-sm font-medium mb-3 text-ink-900">InterKlinik</h3>
                 <p class="text-sm text-ink-600 leading-relaxed">
-                    Professional medical clinic providing comprehensive healthcare services with state-of-the-art facilities.
+                    Medical clinic in Bratislava providing outpatient healthcare services.
                 </p>
             </div>
 
@@ -55,8 +55,6 @@
                 <ul class="text-sm space-y-2 text-ink-600">
                     <li>Medical license: <span class="font-mono text-xs text-ink-900">SK-MED-2024-001</span></li>
                     <li>Registration: <span class="font-mono text-xs text-ink-900">RZ-891234</span></li>
-                    <li>ISO 9001:2015 certified</li>
-                    <li>Ministry of Health approved</li>
                 </ul>
             </div>
         </div>
@@ -72,8 +70,7 @@
                     </p>
                 </div>
                 <div class="md:text-right">
-                    <p>Privacy policy · Terms of service · Contact us</p>
-                    <p class="mt-1">Operating on <span class="font-medium text-ink-600">HIPAA compliant infrastructure</span></p>
+                    <x-legal-links />
                 </div>
             </div>
         </div>

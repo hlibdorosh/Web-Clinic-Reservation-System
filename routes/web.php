@@ -10,6 +10,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Legal pages: public, so they can be read before registering
+Route::prefix('legal')->name('legal.')->group(function () {
+    Route::view('privacy', 'legal.privacy')->name('privacy');
+    Route::view('terms', 'legal.terms')->name('terms');
+    Route::view('refund', 'legal.refund')->name('refund');
+    Route::view('cookies', 'legal.cookies')->name('cookies');
+    Route::view('data-request', 'legal.data-request')->name('data-request');
+});
+
 Route::get('/dashboard', function () {
     $user = Auth::user();
     $notifications = $user->notifications()->latest()->take(30)->get();

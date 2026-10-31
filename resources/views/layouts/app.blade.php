@@ -16,6 +16,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+        <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[70] focus:px-3 focus:py-2 focus:rounded-lg focus:bg-white focus:text-ink-900 focus:ring-2 focus:ring-ocean-500">
+            Skip to content
+        </a>
         <div class="min-h-screen bg-transparent flex flex-col">
             @include('layouts.navigation')
 
@@ -29,12 +32,14 @@
             @endisset
 
             <!-- Page Content -->
-            <main class="flex-grow">
+            <main id="main" class="flex-grow">
                 {{ $slot }}
             </main>
 
             <!-- Footer -->
             <x-footer />
         </div>
+
+        <x-cookie-notice />
     </body>
 </html>

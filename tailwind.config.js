@@ -34,8 +34,9 @@ export default {
                     50:  '#f5f7fa',
                     100: '#eceff4',
                     200: '#dfe4ec',
-                    400: '#9aa3b2',
-                    500: '#6b7487',
+                    // 400/500 darkened so text on white and ink-50 meets WCAG AA (4.5:1)
+                    400: '#657085',
+                    500: '#5f6a7d',
                     600: '#4b5565',
                     900: '#111827',
                 },

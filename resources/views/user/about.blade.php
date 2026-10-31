@@ -12,9 +12,8 @@
             <div class="card p-5 sm:p-6">
                 <h3 class="text-lg font-medium text-ink-900 mb-3">Welcome to InterKlinik</h3>
                 <p class="text-sm text-ink-600 leading-relaxed">
-                    InterKlinik is a modern medical facility dedicated to providing comprehensive healthcare services to our community.
-                    With state-of-the-art equipment and a team of dedicated healthcare professionals, we are committed to delivering
-                    the highest quality medical care to all our patients.
+                    InterKlinik is a medical clinic in Bratislava. Our doctors work in the departments listed below, and you can
+                    book a visit online with the doctor and service you need.
                 </p>
                 <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-ink-50 border border-line p-4 rounded-lg">

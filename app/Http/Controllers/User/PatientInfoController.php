@@ -23,17 +23,26 @@ class PatientInfoController extends Controller
 
     public function update(Request $request)
     {
+        $user = Auth::user();
+        $patientInfo = $user->patientInfo ?? new PatientInfo();
+
+        // Health-related data needs explicit consent. Ask once; keep the timestamp as proof.
+        $consentRequired = $patientInfo->health_data_consent_at === null;
+
         $validated = $request->validate([
             'birth_date' => 'nullable|date',
             'height' => 'nullable|numeric|min:0|max:300',
             'weight' => 'nullable|numeric|min:0|max:500',
             'sex' => 'nullable|in:М,Ж',
+            'health_data_consent' => $consentRequired ? 'accepted' : 'nullable',
+        ], [
+            'health_data_consent.accepted' => 'Please confirm that you agree to the processing of this health information.',
         ]);
 
-        $user = Auth::user();
-        $patientInfo = $user->patientInfo ?? new PatientInfo();
-
-        $patientInfo->fill($validated);
+        $patientInfo->fill(collect($validated)->except('health_data_consent')->all());
+        if ($consentRequired) {
+            $patientInfo->health_data_consent_at = now();
+        }
         $patientInfo->user_id = $user->id;
         $patientInfo->save();
 

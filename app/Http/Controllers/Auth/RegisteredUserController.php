@@ -34,14 +34,26 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms' => ['accepted'],
+            'privacy' => ['accepted'],
+            'age_confirmation' => ['accepted'],
+        ], [
+            'terms.accepted' => 'You must accept the Terms of service.',
+            'privacy.accepted' => 'You must accept the Privacy policy.',
+            'age_confirmation.accepted' => 'You must confirm that you are 16 or older, or that a parent or guardian consents on your behalf.',
         ]);
+
+        $now = now();
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'patient',
-            ]);
+            'terms_accepted_at' => $now,
+            'privacy_accepted_at' => $now,
+            'age_confirmed_at' => $now,
+        ]);
 
         event(new Registered($user));
 

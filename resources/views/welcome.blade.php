@@ -16,6 +16,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-ink-900 bg-white antialiased">
+        <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[70] focus:px-3 focus:py-2 focus:rounded-lg focus:bg-white focus:text-ink-900 focus:ring-2 focus:ring-ocean-500">
+            Skip to content
+        </a>
 
         <!-- Header -->
         <header class="border-b border-line bg-white">
@@ -40,7 +43,7 @@
             </div>
         </header>
 
-        <main>
+        <main id="main">
             <!-- Hero: text on one side, the product preview on the other -->
             <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 lg:pb-28 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 <div>
@@ -69,9 +72,10 @@
                 <!-- Product preview: a doctor's free times for one day -->
                 <div class="relative">
                     <div class="card p-5 sm:p-6">
+                        <p class="mb-3 text-xs text-ink-500">Example of the booking screen</p>
                         <div class="flex items-start justify-between gap-4 pb-4 border-b border-line">
                             <div>
-                                <p class="text-sm font-medium text-ink-900">Dr. Eva Kováčová</p>
+                                <p class="text-sm font-medium text-ink-900">Example doctor</p>
                                 <p class="text-xs text-ink-500">General practice, Cabinet 3</p>
                             </div>
                             <p class="text-sm text-ink-600 tabular-nums">Tue 10 Nov</p>
@@ -132,10 +136,15 @@
         </main>
 
         <footer class="border-t border-line bg-white">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-ink-500">
-                <p>&copy; 2026 InterKlinik. All rights reserved.</p>
-                <p>Bratislava, Slovakia · +421 2 123 456 789 · info@interklinik.sk</p>
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs text-ink-500">
+                <div>
+                    <p>&copy; 2026 InterKlinik. All rights reserved.</p>
+                    <p class="mt-1">Bratislava, Slovakia · +421 2 123 456 789 · info@interklinik.sk</p>
+                </div>
+                <x-legal-links />
             </div>
         </footer>
+
+        <x-cookie-notice />
     </body>
 </html>

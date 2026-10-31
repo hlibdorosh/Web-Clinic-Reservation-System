@@ -27,6 +27,9 @@ class User extends Authenticatable
         'google_calendar_token',
         'google_calendar_refresh_token',
         'google_calendar_token_expires_at',
+        'terms_accepted_at',
+        'privacy_accepted_at',
+        'age_confirmed_at',
     ];
 
     /**
