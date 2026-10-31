@@ -15,6 +15,14 @@
 
 ---
 
+## 🖼️ Screenshot
+
+![InterKlinik landing page](docs/screenshots/main-page.png)
+
+The public landing page. Visitors see the booking flow at a glance: pick a doctor and a free time slot, then create an account or log in to reserve. The preview on the right is an example, not a real doctor's schedule.
+
+---
+
 ## 📋 Project Overview
 
 **InterKlinik** is a **bachelor's degree project** that addresses the gap in Slovak healthcare digital infrastructure. This web application provides an integrated platform for online appointment management, eliminating the limitations found in existing clinic management solutions.
